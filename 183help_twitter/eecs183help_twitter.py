@@ -7,10 +7,12 @@ import string
 
 def get_reply(text):
     """
-    Returns a reply to the message text.
+    Returns a reply to a given string.
     """
+    # split into list of words in lowercase with punctuation removed
     words = [w.strip(string.punctuation) for w in text.lower().split()]
 
+    # a list of responses which can be used for any question
     general_responses = ['try asking on Piazza!',
             'I recommend you go to office hours #NotMyProblem',
             'did you try googling that?',
@@ -22,6 +24,8 @@ def get_reply(text):
         ]
 
     if 'autograder' in words:
+        # returns a random element from the combination of the specific responses
+        # for 'autograder', in addition to all general responses.
         return random.choice(['uh oh.. I think we broke it..',
             "it's not a bug! just an undocumented feature!",
         ] + general_responses)
@@ -45,14 +49,18 @@ def get_reply(text):
 
 def read_config():
     """
-    Reads in the API_Keys from the configuration file, and returns as a dict
+    Reads in the API_Keys from the configuration file, and returns as a dict.
     """
     config = ConfigParser.ConfigParser()
     config.read('183help.cfg')
+    # this is a dictionary comprehension to return the config as key-value pairs.
     return {key: val for (key, val) in config.items('API_Keys')}
 
 class Listener183(StreamListener):
-
+    """
+    This is a listener class which we specialize to call the get_reply function,
+    and print out any data which is received.
+    """
     def on_data(self, raw_data):
         data = json.loads(raw_data)
         # The new version of the Twitter streaming API initially responds
@@ -78,12 +86,14 @@ class Listener183(StreamListener):
         pprint.pprint(vars(status))
 
 if __name__ == '__main__':
+    # authenticate using the credentials in the config file
     keys = read_config()
     auth = OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
     auth.set_access_token(keys['access_token'], keys['access_token_secret'])
+    
+    # create a stream using credentials, and begin the stream
     l = Listener183(api=API(auth))
     stream = Stream(auth, l)
-
     try:
         stream.userstream()
     except KeyboardInterrupt:
