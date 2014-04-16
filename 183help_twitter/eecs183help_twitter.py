@@ -37,6 +37,7 @@ def get_reply(text):
             'This was covered in lecture',
             'Search Piazza!',
             'We will cover that in class later..',
+            'just remember, global variables are the root of all evilll!!',
         ]
 
     if 'autograder' in words:
@@ -53,12 +54,17 @@ def get_reply(text):
             ] + general_responses)
     elif 'codelab' in words:
         return random.choice(['we have no clue what it means either!',
+                "correct solutions don't usually use the 'return' keyword #yousosilly",
             ] + general_responses)
     elif 'style' in words:
         return random.choice(['ask Eva!!',
             "don't look at me! I only got 5/10 for style!",
             "it's a magic number",
             "this code is unreadable!",
+        ] + general_responses)
+    elif ('address' in words and 'sanitizer' in words) or 'asan' in words:
+        return random.choice([
+            'I feel bad for ya son, I got 99 problems but an out of bounds access aint one!"',
         ] + general_responses)
     else:
         return random.choice(general_responses)
