@@ -56,7 +56,7 @@ def get_reply(text):
             ] + general_responses)
     elif 'style' in words:
         return random.choice(['ask Eva!!',
-            "don't at me! I only got 5/10 for style!",
+            "don't look at me! I only got 5/10 for style!",
             "it's a magic number",
             "this code is unreadable!",
         ] + general_responses)
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     keys = read_config()
     auth = OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
     auth.set_access_token(keys['access_token'], keys['access_token_secret'])
-    
+
     # create a stream using credentials, and begin the stream
     l = Listener183(api=API(auth))
     stream = Stream(auth, l)
